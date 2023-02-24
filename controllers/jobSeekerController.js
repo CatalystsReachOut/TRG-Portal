@@ -1,6 +1,5 @@
 import bigPromise from "../middlewares/bigPromise.js";
-import JobSeeker from "../models/JobSeeker.js";
-import { cookieTokenJobseeker } from "../utils/cookieToken.js";
+import JobSeeker from "../models/Jobseeker.js";
 import sendEmail from "../utils/mailHelper.js";
 import Otp from "../models/Otp.js";
 
