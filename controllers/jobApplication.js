@@ -64,14 +64,16 @@ export const getQuestionsJobId = bigPromise(async (req, res, next) => {
         { _id: interviewRound.rounds[i].round },
         "name"
       );
-        console.log(questionsIds);
+      // console.log(questionsIds);
 
       const questions = await QuestionBank.find({
         name: { $in: questionsIds },
-      }).lean().catch(err=>{
-        console.log(`error getting question => ${err}`);
-      });
-        console.log(questions);
+      })
+        .lean()
+        .catch((err) => {
+          console.log(`error getting question => ${err}`);
+        });
+      // console.log(questions);
       questionsRoundWise.push({ round: roundName, questions: questions });
     }
 
@@ -87,7 +89,6 @@ export const getQuestionsJobId = bigPromise(async (req, res, next) => {
       message: "Round Wise Question",
       data: questionsRoundWise,
     });
-
   } catch (error) {
     console.error(error);
     return res.status(500).json({
