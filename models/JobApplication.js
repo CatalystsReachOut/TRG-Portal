@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const jobapplicationSchema = new mongoose.Schema(
+const jobApplicationSchema = new mongoose.Schema(
   {
     applicationId: {
       type: mongoose.Schema.ObjectId,
@@ -8,11 +8,15 @@ const jobapplicationSchema = new mongoose.Schema(
     jobId: {
       type: mongoose.Schema.ObjectId,
     },
-    jobseekerId: {
+    jobSeekerId: {
       type: mongoose.Schema.ObjectId,
     },
-    recuiterId: {
+    interviewer: {
       type: mongoose.Schema.ObjectId,
+    },
+    applyDate: {
+      type: Date,
+      default: Date.now(),
     },
   },
   {
@@ -20,9 +24,9 @@ const jobapplicationSchema = new mongoose.Schema(
   }
 );
 
-const JobApplication = new mongoose.model(
+const JobApplication = mongoose.model(
   "JobApplication",
-  jobapplicationSchema
+  jobApplicationSchema
 );
 
 export default JobApplication;

@@ -14,10 +14,12 @@ const interviewRoundSchema = new mongoose.Schema({
     {
       round: {
         type: mongoose.Types.ObjectId,
+        ref: "Round",
       },
       question: [
         {
           type: mongoose.Types.ObjectId,
+          ref: "QuestionBank",
         },
       ],
       subjectiveQuestion: {

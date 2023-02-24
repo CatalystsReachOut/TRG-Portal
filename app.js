@@ -28,6 +28,7 @@ import headerRoutes from "./routes/headerRoutes.js"
 import jobRoutes from "./routes/jobRoutes.js"
 import jobSeekerRoutes from "./routes/jobSeekerRoutes.js"
 import employeeRoutes from "./routes/employeeRoutes.js"
+import jobApplicationRoutes from "./routes/jobApplicationRoute.js"
 
 // router middleware
 app.use("/api/v1",userRoutes);
@@ -35,6 +36,7 @@ app.use("/api/v1",headerRoutes);
 app.use("/api/v1",jobRoutes);
 app.use("/api/v1",jobSeekerRoutes);
 app.use("/api/v1",employeeRoutes);
+app.use("/api/v1",jobApplicationRoutes);
 
 app.get("/",(req,res,next)=>{
     return res.status(200).send({
