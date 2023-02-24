@@ -243,6 +243,7 @@ export const updateDetails = bigPromise(async (req, res, next) => {
       phoneNumber: req.body.phoneNumber,
       experience: req.body.experience,
       education: req.body.education,
+      employment: req.body.employment,
       avatar: req.body.avatar,
       finalStep: req.query.finalStep,
     };
