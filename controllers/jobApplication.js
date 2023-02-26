@@ -16,7 +16,7 @@ export const jobApplication = bigPromise(async (req, res, next) => {
   };
   //   console.log(jobSeekerId);
   //   console.log(req.params);
-  const jobSeeker = await JobApplication.findOne({ jobSeekerId })
+  const jobSeeker = await JobApplication.findOne({ jobSeekerId, jobId })
     .lean()
     .catch((err) => {
       console.log(`error getting job application=> ${err}`);
@@ -41,7 +41,7 @@ export const jobApplication = bigPromise(async (req, res, next) => {
     });
   }
 
-  return res.status(500).json({
+  return res.status(200).json({
     success: true,
     message: "Successfully Applied for Job!",
     data: jobApplication,
