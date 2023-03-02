@@ -1,3 +1,4 @@
+// import JobApplication from "../models/JobApplication.js";
 import JobApplication from "../models/JobApplication.js";
 import bigPromise from "../middlewares/bigPromise.js";
 import Jobs from "../models/Job.js";
@@ -57,6 +58,7 @@ export const getQuestionsJobId = bigPromise(async (req, res, next) => {
     const interviewRound = await InterviewRound.findOne({
       profileId: job.profileId,
     });
+    console.log(interviewRound);
 
     for (let i = 0; i < interviewRound.rounds.length; i++) {
       const questionsIds = interviewRound.rounds[i].question;
@@ -66,6 +68,8 @@ export const getQuestionsJobId = bigPromise(async (req, res, next) => {
       );
       // console.log(questionsIds);
 
+      const totalMarks = interviewRound.rounds[i].totalMarks;
+
       const questions = await QuestionBank.find({
         name: { $in: questionsIds },
       })
@@ -74,7 +78,11 @@ export const getQuestionsJobId = bigPromise(async (req, res, next) => {
           console.log(`error getting question => ${err}`);
         });
       // console.log(questions);
-      questionsRoundWise.push({ round: roundName, questions: questions });
+      questionsRoundWise.push({
+        round: roundName,
+        questions: questions,
+        totalMarks: totalMarks,
+      });
     }
 
     if (questionsRoundWise.length === 0) {

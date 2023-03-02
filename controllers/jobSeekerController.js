@@ -2,6 +2,7 @@ import bigPromise from "../middlewares/bigPromise.js";
 import JobSeeker from "../models/Jobseeker.js";
 import sendEmail from "../utils/mailHelper.js";
 import Otp from "../models/Otp.js";
+import QuestionBank from "../models/headers/questionBank.js";
 
 const generateOTP = () => {
   var digits = "0123456789";
@@ -125,7 +126,7 @@ export const otpValid = async (req, res, next) => {
         console.log(`error validating Otp :: ${err}`);
         return null;
       });
-      
+
     if (verify === null) {
       return res.status(400).json({
         success: false,
@@ -275,4 +276,133 @@ export const updateDetails = bigPromise(async (req, res, next) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+// export const evaluate = bigPromise(async (req, res, next) => {
+//   const answers = req.body.answers;
+//   const questionIds = answers.map((a) => a.questionId);
+//   console.log(answers);
+//   console.log(questionIds);
+//   try {
+//     // fetch all questions from the database for the given questionIds
+//     const questions = await QuestionBank.find({
+//       _id: { $in: questionIds },
+//       status: "ACTIVE",
+//     });
+
+//     let totalMarks = 0;
+//     let results = [];
+
+//     console.log(questions);
+
+//     // evaluate each answer and calculate total marks
+//     answers.forEach((answer) => {
+//       const question = questions.find(
+//         (q) => q._id.toString() === answer.questionId.toString()
+//       );
+
+//       if (!question) {
+//         results.push({
+//           questionId: answer.questionId,
+//           marks: 0,
+//           error: "Question not found",
+//         });
+//       } else if (question.questionType === "Objective") {
+//         if (answer.selectedOption === question.correctAnswer) {
+//           totalMarks += 1;
+//           results.push({
+//             questionId: answer.questionId,
+//             marks: 1,
+//             error: null,
+//           });
+//         } else {
+//           results.push({
+//             questionId: answer.questionId,
+//             marks: 0,
+//             error: "Incorrect answer",
+//           });
+//         }
+//       } else if (question.questionType === "Subjective") {
+//         const keywords = question.correctAnswer.split(",");
+//         console.log(keywords);
+
+//         // Check if the student's answer contains any of the keywords
+//         for (let i = 0; i < keywords.length; i++) {
+//           if (answer.selectedOption.includes(keywords[i])) {
+//             console.log(answer.selectedOption.includes(keywords[i]));
+//             totalMarks += 1;
+//           }
+//         }
+//         // if(answer.selectedOption.includes())
+//         // subjective questions are not evaluated automatically, so we mark them as zero
+//         results.push({
+//           questionId: answer.questionId,
+//           marks: 1,
+//           error: "Subjective question",
+//         });
+//       }
+//     });
+
+//     // return the evaluation results
+//     res.json({ totalMarks, results });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
+
+export const evaluate = bigPromise(async (req, res) => {
+  const { answers, totalMarks } = req.body;
+  const totalQuestions = answers.length;
+  let earnedMark = 0;
+  let perQuestionMark = totalMarks / totalQuestions;
+  // console.log(perQuestionMark);
+
+  for (let i = 0; i < answers.length; i++) {
+    const answer = answers[i];
+    const question = await QuestionBank.findById(answer.questionId);
+    if (!question) {
+      return res.status(400).json({ error: "Invalid question ID" });
+    }
+
+    if (question.questionType === "Objective") {
+      const selectedOption = question.options.find(
+        (option) => option.answerBody === answer.selectedOption
+      );
+      if (!selectedOption) {
+        return res.status(400).json({ error: "Invalid option selected" });
+      }
+      // console.log(selectedOption);
+      if (selectedOption.answerBody === question.correctAnswer) {
+        earnedMark += perQuestionMark;
+      }
+    } else {
+      const keywords = question.correctAnswer.split(",");
+      // console.log(keywords);
+      var answerFlag = false;
+      for (let i = 0; i < keywords.length; i++) {
+        if (answer.selectedOption.includes(keywords[i])) {
+          answerFlag = true;
+        }
+      }
+
+      if (answerFlag === true) {
+        earnedMark += perQuestionMark;
+      }
+    }
+  }
+
+  var result = "FAILED";
+
+  const percentage = (earnedMark / totalMarks) * 100;
+  if (percentage >= 60) {
+    result = "PASSED";
+  }
+  return res.status(200).json({
+    success: true,
+    message: "Result",
+    result: result,
+    totalMarks,
+    percentage,
+  });
 });

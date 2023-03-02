@@ -9,6 +9,7 @@ import {
   registerJobSeeker,
   otpValid,
   updateDetails,
+  evaluate,
 } from "../controllers/jobSeekerController.js";
 
 // import userMiddlewares
@@ -22,5 +23,6 @@ router
   .get(isLoggedIn, getLoggedInJobSeekerDetails);
 router.route("/jobSeeker/otp-verify").post(otpValid);
 router.route("/jobSeeker/update").put(isLoggedIn, updateDetails);
+router.route("/jobSeeker/evaluate").post(isLoggedIn,evaluate );
 
 export default router;
