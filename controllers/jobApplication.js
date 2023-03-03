@@ -70,6 +70,8 @@ export const getQuestionsJobId = bigPromise(async (req, res, next) => {
 
       const totalMarks = interviewRound.rounds[i].totalMarks;
 
+      const totalTime = interviewRound.rounds[i].time;
+
       const questions = await QuestionBank.find({
         name: { $in: questionsIds },
       })
@@ -82,6 +84,7 @@ export const getQuestionsJobId = bigPromise(async (req, res, next) => {
         round: roundName,
         questions: questions,
         totalMarks: totalMarks,
+        totalTime: totalTime,
       });
     }
 

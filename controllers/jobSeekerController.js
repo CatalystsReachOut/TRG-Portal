@@ -280,7 +280,7 @@ export const updateDetails = bigPromise(async (req, res, next) => {
 });
 
 export const evaluate = bigPromise(async (req, res) => {
-  const { answers, totalMarks, roundName } = req.body;
+  const { answers, totalMarks, roundName, roundId } = req.body;
   const totalQuestions = answers.length;
   let earnedMark = 0;
   let perQuestionMark = totalMarks / totalQuestions;
@@ -328,12 +328,13 @@ export const evaluate = bigPromise(async (req, res) => {
 
   const applicationId = req.params.applicationId;
   // console.log(applicationId);
-  
+
   const application = await JobApplication.findById({ _id: applicationId });
   // console.log(application);
 
   const newData = {
     marksObtained: earnedMark,
+    roundId: roundId,
     roundName: roundName,
     status: result,
   };

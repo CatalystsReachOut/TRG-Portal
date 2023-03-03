@@ -23,6 +23,9 @@ const jobApplicationSchema = new mongoose.Schema(
         marksObtained: {
           type: Number,
         },
+        roundId: {
+          type: mongoose.Types.ObjectId,
+        },
         roundName: {
           type: String,
         },
