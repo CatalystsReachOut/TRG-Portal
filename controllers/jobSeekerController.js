@@ -3,6 +3,7 @@ import JobSeeker from "../models/Jobseeker.js";
 import sendEmail from "../utils/mailHelper.js";
 import Otp from "../models/Otp.js";
 import QuestionBank from "../models/headers/questionBank.js";
+import JobApplication from "../models/JobApplication.js";
 
 const generateOTP = () => {
   var digits = "0123456789";
@@ -352,7 +353,7 @@ export const updateDetails = bigPromise(async (req, res, next) => {
 // });
 
 export const evaluate = bigPromise(async (req, res) => {
-  const { answers, totalMarks } = req.body;
+  const { answers, totalMarks, roundName } = req.body;
   const totalQuestions = answers.length;
   let earnedMark = 0;
   let perQuestionMark = totalMarks / totalQuestions;
@@ -393,16 +394,29 @@ export const evaluate = bigPromise(async (req, res) => {
   }
 
   var result = "FAILED";
-
   const percentage = (earnedMark / totalMarks) * 100;
   if (percentage >= 60) {
     result = "PASSED";
   }
+
+  const applicationId = req.params.applicationId;
+  // console.log(applicationId);
+  
+  const application = await JobApplication.findById({ _id: applicationId });
+  // console.log(application);
+
+  const newData = {
+    marksObtained: earnedMark,
+    roundName: roundName,
+    status: result,
+  };
+
+  application.roundWiseStats.push(newData);
+  application.save();
+
   return res.status(200).json({
     success: true,
-    message: "Result",
-    result: result,
-    totalMarks,
-    percentage,
+    message: `Result of ${roundName}`,
+    data: newData,
   });
 });

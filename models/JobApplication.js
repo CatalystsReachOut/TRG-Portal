@@ -18,15 +18,26 @@ const jobApplicationSchema = new mongoose.Schema(
       type: Date,
       default: Date.now(),
     },
+    roundWiseStats: [
+      {
+        marksObtained: {
+          type: Number,
+        },
+        roundName: {
+          type: String,
+        },
+        status: {
+          type: String,
+          enum: ["PASSED", "FAILED"],
+        },
+      },
+    ],
   },
   {
     timestamps: true,
   }
 );
 
-const JobApplication = mongoose.model(
-  "JobApplication",
-  jobApplicationSchema
-);
+const JobApplication = mongoose.model("JobApplication", jobApplicationSchema);
 
 export default JobApplication;
