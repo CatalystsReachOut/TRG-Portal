@@ -54,11 +54,20 @@ export const getQuestionsJobId = bigPromise(async (req, res, next) => {
     const jobId = req.params.jobId;
     const job = await Jobs.findOne({ _id: jobId });
     const questionsRoundWise = [];
+    // console.log(req.user);
+
+    const applicationId = await JobApplication.find(
+      {
+        jobId,
+        jobSeekerId: req.user._id,
+      },
+      "_id"
+    );
 
     const interviewRound = await InterviewRound.findOne({
       profileId: job.profileId,
     });
-    console.log(interviewRound);
+    // console.log(interviewRound);
 
     for (let i = 0; i < interviewRound.rounds.length; i++) {
       const questionsIds = interviewRound.rounds[i].question;
@@ -85,6 +94,7 @@ export const getQuestionsJobId = bigPromise(async (req, res, next) => {
         questions: questions,
         totalMarks: totalMarks,
         totalTime: totalTime,
+        applicationId: applicationId[0]._id,
       });
     }
 

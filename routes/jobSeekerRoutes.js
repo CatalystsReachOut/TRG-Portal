@@ -23,6 +23,6 @@ router
   .get(isLoggedIn, getLoggedInJobSeekerDetails);
 router.route("/jobSeeker/otp-verify").post(otpValid);
 router.route("/jobSeeker/update").put(isLoggedIn, updateDetails);
-router.route("/jobSeeker/evaluate/:applicationId").post(isLoggedIn,evaluate );
+router.route("/jobSeeker/evaluate/:applicationId").put(isLoggedIn,evaluate );
 
 export default router;
