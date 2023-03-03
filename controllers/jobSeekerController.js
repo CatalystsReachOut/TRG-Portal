@@ -334,6 +334,7 @@ export const evaluate = bigPromise(async (req, res) => {
 
   const newData = {
     marksObtained: earnedMark,
+    percentage: percentage,
     roundId: roundId,
     roundName: roundName,
     status: result,
