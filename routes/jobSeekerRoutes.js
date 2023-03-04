@@ -10,6 +10,7 @@ import {
   otpValid,
   updateDetails,
   evaluate,
+  appliedJobs
 } from "../controllers/jobSeekerController.js";
 
 // import userMiddlewares
@@ -24,5 +25,6 @@ router
 router.route("/jobSeeker/otp-verify").post(otpValid);
 router.route("/jobSeeker/update").put(isLoggedIn, updateDetails);
 router.route("/jobSeeker/evaluate/:applicationId").put(isLoggedIn,evaluate );
+router.route("/jobSeeker/appliedJobs").get(isLoggedIn,appliedJobs );
 
 export default router;

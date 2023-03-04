@@ -43,6 +43,15 @@ const jobseekerSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    appliedJobs: [
+      {
+        applicationId: {
+          type: mongoose.Types.ObjectId,
+          ref: "JobApplication",
+          unique: true,
+        },
+      },
+    ],
     employment: [
       {
         currentlyEmployed: {

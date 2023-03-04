@@ -5,12 +5,13 @@ import Jobs from "../models/Job.js";
 import InterviewRound from "../models/headers/interviewRounds.js";
 import Round from "../models/headers/rounds.js";
 import QuestionBank from "../models/headers/questionBank.js";
+import JobSeeker from "../models/Jobseeker.js";
 
 export const jobApplication = bigPromise(async (req, res, next) => {
   const jobId = req.params.jobId;
-  console.log(req.user);
+  // console.log(req.user);
   const jobSeekerId = req.user.id;
-  console.log(jobId);
+  // console.log(jobId);
   const toStore = {
     jobId,
     jobSeekerId,
@@ -42,10 +43,27 @@ export const jobApplication = bigPromise(async (req, res, next) => {
     });
   }
 
+  const newData = {
+    applicationId: jobApplication._id,
+  };
+
+  console.log(jobApplication);
+  const user = await JobSeeker.findByIdAndUpdate(
+    jobSeekerId,
+    { $push: { appliedJobs: newData } },
+    { new: true }
+  )
+    .lean()
+    .catch((err) => {
+      console.log(`error updating jobseeker=> ${err}`);
+      return null;
+    });
+
   return res.status(200).json({
     success: true,
     message: "Successfully Applied for Job!",
     data: jobApplication,
+    data2: user,
   });
 });
 

@@ -25,6 +25,7 @@ const jobApplicationSchema = new mongoose.Schema(
         },
         roundId: {
           type: mongoose.Types.ObjectId,
+          uniques: true,
         },
         roundName: {
           type: String,
