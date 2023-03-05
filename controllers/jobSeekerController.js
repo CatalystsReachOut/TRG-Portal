@@ -353,7 +353,7 @@ export const evaluate = bigPromise(async (req, res) => {
 export const appliedJobs = bigPromise(async (req, res) => {
   try {
     const jobSeekerId = req.user.id;
-    // console.log(jobSeekerId);
+    console.log(jobSeekerId);
 
     const jobseeker = await JobSeeker.findById({ _id: jobSeekerId }, [
       "appliedJobs",

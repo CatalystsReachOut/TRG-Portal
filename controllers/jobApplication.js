@@ -158,6 +158,31 @@ export const getAllApplicant = bigPromise(async (req, res, next) => {
   });
 });
 
+export const getApplicantJobs = bigPromise(async (req, res, next) => {
+
+  const jobSeekerId = req.user.id;
+
+  const Applications = await JobApplication.find({
+    jobSeekerId:jobSeekerId
+  }).catch((err) => {
+    console.log(`error getting applicants :: ${err}`);
+    return null;
+  });
+
+  if (Applications === null) {
+    return res.status(501).json({
+      success: false,
+      message: "Internal Server error !",
+    });
+  }
+
+  res.status(201).json({
+    success: true,
+    message: "All Applicants!",
+    data: Applications,
+  });
+});
+
 export const updateApplicant = bigPromise(async (req, res, next) => {
   const newData = {
     jobId: req.body.jobId,
