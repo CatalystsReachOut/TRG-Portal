@@ -7,9 +7,11 @@ const jobApplicationSchema = new mongoose.Schema(
     },
     jobId: {
       type: mongoose.Schema.ObjectId,
+      ref: "Job",
     },
     jobSeekerId: {
       type: mongoose.Schema.ObjectId,
+      ref: "JobSeeker",
     },
     interviewer: {
       type: mongoose.Schema.ObjectId,
@@ -36,6 +38,11 @@ const jobApplicationSchema = new mongoose.Schema(
         },
       },
     ],
+    status: {
+      type: String,
+      enum: ["ACTIVE", "INACTIVE", "DELETED"],
+      default: "ACTIVE",
+    },
   },
   {
     timestamps: true,
