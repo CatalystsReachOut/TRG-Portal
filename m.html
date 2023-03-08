@@ -1,0 +1,162 @@
+<!-- 
+Online HTML, CSS and JavaScript editor to run code online.
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Browser</title>
+  </head>
+  <style>
+    .left {
+      float: left;
+      width: 40%;
+    }
+    .right {
+      float: right;
+      width: 60%;
+    }
+    .left2 {
+      float: left;
+      width: 60%;
+    }
+    .right2 {
+      float: right;
+      width: 40%;
+    }
+    section {
+      margin: auto;
+      border: 1px solid red;
+    }
+
+    .group:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+    @media screen and (max-width: 1146px) {
+      .left,
+      .right {
+        float: none;
+        width: auto;
+      }
+      .right p {
+        margin: auto;
+        display: flex;
+        justify-content: center;
+      }
+      h1 {
+        text-align: center;
+      }
+      .left2,
+      .right2 {
+        float: none;
+        width: auto;
+      }
+      .right2 p {
+        margin: auto;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  </style>
+  <body>
+    <section>
+      <h1 style="text-align: center">Heading</h1>
+      <div class="group">
+        <div class="right">
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima
+            corporis voluptates repellat ullam labore qui voluptatum error
+            nesciunt ratione dolorem fugiat veritatis ipsum nobis eius dicta est
+            obcaecati ab animi illum molestias accusamus cum laboriosam magni
+            recusandae earum unde fuga deserunt laudantium facere ducimus rerum
+            tempora pariatur consectetur iste nulla a aut ea sit nam autem
+            doloremque iusto exercitationem voluptatem facilis eos quasi.
+            Mollitia sequi assumenda corrupti repellendus ex amet reprehenderit
+            animi illum ducimus totam unde quia distinctio quam velit magnam.
+            Voluptatibus dolores natus sint enim fugiat. Sapiente voluptates
+            enim officiis. Iste repudiandae illo nulla sed nam a ratione iure?
+          </p>
+        </div>
+
+        <div class="left">
+          <div
+            class="image-two wow fadeInLeft animated"
+            data-wow-delay="300ms"
+            data-wow-duration="1500ms"
+            style="
+              width: 40%;
+              height: 100%;
+              visibility: visible;
+              animation-duration: 1500ms;
+              animation-delay: 300ms;
+              animation-name: fadeInLeft;
+            "
+          >
+            <div class="image-box" style="height: 450px; width: 450px">
+              <img
+                class="lazy-image owl-lazy loaded"
+                style="height: 450px; width: 450px"
+                src="../assets/images/business-logo/management/OURFOCUS.png"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h1 style="text-align: center">Heading</h1>
+      <div class="group">
+        <div class="left2">
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima
+            corporis voluptates repellat ullam labore qui voluptatum error
+            nesciunt ratione dolorem fugiat veritatis ipsum nobis eius dicta est
+            obcaecati ab animi illum molestias accusamus cum laboriosam magni
+            recusandae earum unde fuga deserunt laudantium facere ducimus rerum
+            tempora pariatur consectetur iste nulla a aut ea sit nam autem
+            doloremque iusto exercitationem voluptatem facilis eos quasi.
+            Mollitia sequi assumenda corrupti repellendus ex amet reprehenderit
+            animi illum ducimus totam unde quia distinctio quam velit magnam.
+            Voluptatibus dolores natus sint enim fugiat. Sapiente voluptates
+            enim officiis. Iste repudiandae illo nulla sed nam a ratione iure?
+          </p>
+        </div>
+
+        <div class="right2">
+          <div
+            class="image-two wow fadeInLeft animated"
+            data-wow-delay="300ms"
+            data-wow-duration="1500ms"
+            style="
+              float: right;
+              height: 100%;
+              visibility: visible;
+              animation-duration: 1500ms;
+              animation-delay: 300ms;
+              animation-name: fadeInLeft;
+            "
+          >
+            <div class="image-box" style="height: 450px; width: 450px">
+              <img
+                class="lazy-image owl-lazy loaded"
+                style="height: 450px; width: 450px"
+                src="../assets/images/business-logo/management/OURFOCUS.png"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="script.js"></script>
+  </body>
+</html>

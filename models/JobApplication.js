@@ -7,7 +7,7 @@ const jobApplicationSchema = new mongoose.Schema(
     },
     jobId: {
       type: mongoose.Schema.ObjectId,
-      ref: "Job",
+      ref: "Jobs",
     },
     jobSeekerId: {
       type: mongoose.Schema.ObjectId,
@@ -15,6 +15,7 @@ const jobApplicationSchema = new mongoose.Schema(
     },
     interviewer: {
       type: mongoose.Schema.ObjectId,
+      ref: "Profile",
     },
     applyDate: {
       type: Date,

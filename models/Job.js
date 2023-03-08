@@ -13,11 +13,11 @@ const jobsSchema = new mongoose.Schema(
     headcount: {
       type: Number,
     },
-    currencyId:{
-      type: mongoose.Schema.ObjectId
+    currencyId: {
+      type: mongoose.Schema.ObjectId,
     },
     departmentId: {
-      type: mongoose.Schema.ObjectId
+      type: mongoose.Schema.ObjectId,
     },
     businessId: {
       type: mongoose.Schema.ObjectId,
@@ -33,6 +33,7 @@ const jobsSchema = new mongoose.Schema(
     },
     profileId: {
       type: mongoose.Schema.ObjectId,
+      ref: "Profile",
     },
     interviewRoundId: {
       type: mongoose.Schema.ObjectId,
@@ -187,7 +188,7 @@ const jobsSchema = new mongoose.Schema(
       default: null,
     },
     approvedBy: {
-      type: mongoose.Types.ObjectId
+      type: mongoose.Types.ObjectId,
     },
   },
   {

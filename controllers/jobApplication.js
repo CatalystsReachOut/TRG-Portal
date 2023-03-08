@@ -1,7 +1,8 @@
 // import JobApplication from "../models/JobApplication.js";
 import JobApplication from "../models/JobApplication.js";
 import bigPromise from "../middlewares/bigPromise.js";
-import Jobs from "../models/Job.js";
+import Job from "../models/Job.js";
+
 import InterviewRound from "../models/headers/interviewRounds.js";
 import Round from "../models/headers/rounds.js";
 import QuestionBank from "../models/headers/questionBank.js";
@@ -140,69 +141,45 @@ export const getQuestionsJobId = bigPromise(async (req, res, next) => {
 });
 
 export const getAllApplicant = bigPromise(async (req, res, next) => {
-  // const allApplicants = await JobApplication.find({}).catch((err) => {
-  //   console.log(`error getting applicants :: ${err}`);
-  //   return null;
-  // });
+  try {
+    const { jobId } = req.query;
+    var condition = {};
 
-  const allApplicants = await JobApplication.aggregate([
-    {
-      $lookup: {
-        from: "jobseekers",
-        localField: "jobSeekerId",
-        foreignField: "_id",
-        as: "jobSeeker",
-      },
-    },
-    {
-      $lookup: {
-        from: "jobs",
-        localField: "jobId",
-        foreignField: "_id",
-        as: "job",
-      },
-    },
-    {
-      $unwind: "$jobSeeker",
-    },
-    {
-      $unwind: "$job",
-    },
-    {
-      $group: {
-        _id: "$_id",
-        fullName: { $first: "$jobSeeker.fullName" },
-        jobProfile: { $first: "$job.profileId" },
-        applyDate: { $min: "$applyDate" },
-        interviewer: { $min: "$interviewer" },
-        status: { $min: "$status" },
-      },
-    },
-  ]);
+    if (jobId) {
+      condition = {
+        jobId: req.query.jobId,
+      };
+    }
+    // console.log(condition);
 
-  console.log(allApplicants);
-  if (allApplicants === null) {
-    return res.status(501).json({
-      success: false,
-      message: "Internal Server error !",
+    const jobApplications = await JobApplication.find(condition)
+      .populate({
+        path: "jobId",
+        select: "profileId",
+        populate: { path: "profileId", select: "title" },
+      })
+      .populate("jobSeekerId", "fullName")
+      .populate("interviewer", "title")
+      .select("applyDate roundWiseStats")
+      .exec();
+
+    const applicants = jobApplications.map((jobApplication) => {
+      return {
+        jobProfileName: jobApplication.jobId.profileId.title,
+        applicantName: jobApplication.jobSeekerId.fullName,
+        applyDate: jobApplication.applyDate,
+      };
     });
+    // console.log(applicants);
+
+    return res.status(200).json({
+      success: true,
+      message: "All Applicants",
+      data: applicants,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
-
-  const jobSeekerName = await JobSeeker.findOne(
-    { _id: allApplicants.jobSeekerId },
-    "fullName"
-  );
-
-  const jobProf = await JobSeeker.findOne(
-    { _id: allApplicants.jobSeekerId },
-    "fullName"
-  );
-
-  res.status(201).json({
-    success: true,
-    message: "All Applicants!",
-    data: allApplicants,
-  });
 });
 
 export const getApplicantJobs = bigPromise(async (req, res, next) => {
