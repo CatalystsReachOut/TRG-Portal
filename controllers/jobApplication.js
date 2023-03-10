@@ -168,6 +168,10 @@ export const getAllApplicant = bigPromise(async (req, res, next) => {
         jobProfileName: jobApplication.jobId.profileId.title,
         applicantName: jobApplication.jobSeekerId.fullName,
         applyDate: jobApplication.applyDate,
+        jobId: jobApplication.jobId,
+        jobSeekerId: jobApplication.jobSeekerId,
+        roundWiseStats: jobApplication.roundWiseStats,
+
       };
     });
     // console.log(applicants);
@@ -188,7 +192,7 @@ export const getApplicantJobs = bigPromise(async (req, res, next) => {
     status: ["ACTIVE", "INACTIVE"],
     jobSeekerId: jobSeekerId,
   };
-  
+
   const Applications = await JobApplication.find(condition).catch((err) => {
     console.log(`error getting applicants :: ${err}`);
     return null;
