@@ -14,8 +14,7 @@ const jobApplicationSchema = new mongoose.Schema(
       ref: "JobSeeker",
     },
     interviewer: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Profile",
+      type: String,
     },
     applyDate: {
       type: Date,
