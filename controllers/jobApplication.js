@@ -168,6 +168,10 @@ export const getAllApplicant = bigPromise(async (req, res, next) => {
         jobProfileName: jobApplication.jobId.profileId.title,
         applicantName: jobApplication.jobSeekerId.fullName,
         applyDate: jobApplication.applyDate,
+        jobId: jobApplication.jobId,
+        jobSeekerId: jobApplication.jobSeekerId,
+        roundWiseStats: jobApplication.roundWiseStats,
+
       };
     });
     // console.log(applicants);

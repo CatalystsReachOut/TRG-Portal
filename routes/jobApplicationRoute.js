@@ -6,7 +6,8 @@ import {
   jobApplication,
   getQuestionsJobId,
   getAllApplicant,
-  getApplicantJobs
+  getApplicantJobs,
+  updateApplicant
   // evaluate,
 } from "../controllers/jobApplication.js";
 
@@ -18,6 +19,8 @@ router.route("/jobApplication/:jobId").post(isLoggedIn, jobApplication);
 router.route("/jobApplication/myApplications").get(isLoggedIn, getApplicantJobs);
 router.route("/jobApplication/questions/:jobId").get(isLoggedIn, getQuestionsJobId);
 router.route("/jobApplication/applicant").get(getAllApplicant);  // for admin
+
+router.route("/jobApplication/applicant/:id").put(isLoggedIn, updateApplicant);
 
 
 export default router;
