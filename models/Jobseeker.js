@@ -52,6 +52,9 @@ const jobseekerSchema = new mongoose.Schema(
         },
       },
     ],
+    address: {
+      type: String,
+    },
     employment: [
       {
         currentlyEmployed: {

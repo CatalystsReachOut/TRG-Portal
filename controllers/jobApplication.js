@@ -193,7 +193,7 @@ export const getApplicantJobs = bigPromise(async (req, res, next) => {
     status: ["ACTIVE", "INACTIVE"],
     jobSeekerId: jobSeekerId,
   };
-  
+
   const Applications = await JobApplication.find(condition).catch((err) => {
     console.log(`error getting applicants :: ${err}`);
     return null;
