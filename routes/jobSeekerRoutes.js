@@ -10,7 +10,8 @@ import {
   otpValid,
   updateDetails,
   evaluate,
-  appliedJobs
+  // appliedJobs,
+  getAllJobSeeker,
 } from "../controllers/jobSeekerController.js";
 
 // import userMiddlewares
@@ -19,12 +20,11 @@ import { isLoggedIn } from "../middlewares/jobSeekerMiddleware.js";
 router.route("/jobSeeker/register").post(registerJobSeeker);
 router.route("/jobSeeker/login").post(loginJobSeeker);
 router.route("/jobSeeker/logout").get(logout);
-router
-  .route("/jobSeeker/dashboard")
-  .get(isLoggedIn, getLoggedInJobSeekerDetails);
+router.route("/jobSeeker/dashboard").get(isLoggedIn, getLoggedInJobSeekerDetails);
 router.route("/jobSeeker/otp-verify").post(otpValid);
 router.route("/jobSeeker/update").put(isLoggedIn, updateDetails);
-router.route("/jobSeeker/evaluate/:applicationId").put(isLoggedIn,evaluate );
-router.route("/jobSeeker/appliedJobs").get(isLoggedIn,appliedJobs );
+router.route("/jobSeeker/evaluate/:applicationId").put(isLoggedIn, evaluate);
+// router.route("/jobSeeker/appliedJobs").get(isLoggedIn, appliedJobs);
+router.route("/jobSeeker/").get(getAllJobSeeker);
 
 export default router;

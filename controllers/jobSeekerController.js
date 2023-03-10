@@ -350,46 +350,72 @@ export const evaluate = bigPromise(async (req, res) => {
   });
 });
 
-export const appliedJobs = bigPromise(async (req, res) => {
+// export const appliedJobs = bigPromise(async (req, res) => {
+//   try {
+//     const jobSeekerId = req.user.id;
+//     console.log(jobSeekerId);
+
+//     const jobseeker = await JobSeeker.findById({ _id: jobSeekerId }, [
+//       "appliedJobs",
+//       "fullName",
+//     ])
+//       .lean()
+//       .catch((err) => {
+//         console.log(`error getting jobseeker ::${err}`);
+//         return null;
+//       });
+//     console.log(jobseeker);
+
+//     const appliedJobIds = jobseeker.appliedJobs.map((job) => job.applicationId);
+//     // console.log(appliedJobIds);
+
+//     const applications = await JobApplication.find({
+//       _id: { $in: appliedJobIds },
+//     })
+//       .lean()
+//       .catch((err) => {
+//         console.log(`error getting applications ::${err}`);
+//         return null;
+//       });
+
+//     if (applications === null) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "You didn't applied for any jobs.",
+//       });
+//     }
+//     // console.log(applications);
+
+//     return res.status(200).json({
+//       success: true,
+//       message: `All the Job Applied by ${jobseeker.fullName}`,
+//       data: applications,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
+
+export const getAllJobSeeker = bigPromise(async (req, res) => {
   try {
-    const jobSeekerId = req.user.id;
-    console.log(jobSeekerId);
-
-    const jobseeker = await JobSeeker.findById({ _id: jobSeekerId }, [
-      "appliedJobs",
-      "fullName",
-    ])
+    const jobSeeker = await JobSeeker.find({ isActive: true, isVerified: true })
       .lean()
       .catch((err) => {
-        console.log(`error getting jobseeker ::${err}`);
-        return null;
-      });
-    console.log(jobseeker);
-
-    const appliedJobIds = jobseeker.appliedJobs.map((job) => job.applicationId);
-    // console.log(appliedJobIds);
-
-    const applications = await JobApplication.find({
-      _id: { $in: appliedJobIds },
-    })
-      .lean()
-      .catch((err) => {
-        console.log(`error getting applications ::${err}`);
+        console.log(`error getting jobseeker ${err}`);
         return null;
       });
 
-    if (applications === null) {
-      return res.status(400).json({
+    if (jobSeeker === null) {
+      return res.status(500).json({
         success: false,
-        message: "You didn't applied for any jobs.",
+        message: "Failed to get JobSeekers",
       });
     }
-    // console.log(applications);
 
     return res.status(200).json({
       success: true,
-      message: `All the Job Applied by ${jobseeker.fullName}`,
-      data: applications,
+      message: "All JobSeekers",
+      data: jobSeeker,
     });
   } catch (error) {
     console.log(error);
