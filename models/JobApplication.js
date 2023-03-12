@@ -27,6 +27,7 @@ const jobApplicationSchema = new mongoose.Schema(
         },
         roundId: {
           type: mongoose.Types.ObjectId,
+          ref: "Round",
           uniques: true,
         },
         roundName: {
@@ -40,7 +41,7 @@ const jobApplicationSchema = new mongoose.Schema(
     ],
     status: {
       type: String,
-      enum: ["ACTIVE", "INACTIVE", "DELETED"],
+      enum: ["APPLIED", "EXAM-COMPLETED", "INTERVIEWED", "EXAM-PASSED"],
       default: "ACTIVE",
     },
   },
