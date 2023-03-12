@@ -335,10 +335,7 @@ export const evaluate = bigPromise(async (req, res) => {
 
   var roundNumber;
 
-  console.log(application.roundWiseStats.length);
-  console.log(application.totalRound);
-
-  if (application.roundWiseStats.length <application.totalRound) {
+  if (application.roundWiseStats.length < application.totalRound) {
     roundNumber = application.roundWiseStats.length += 1;
     console.log(roundNumber);
     var newData = {
@@ -350,11 +347,9 @@ export const evaluate = bigPromise(async (req, res) => {
       status: result,
     };
 
-    // console.log(newData);
     application?.roundWiseStats?.push(newData);
-    // console.log(application);
     await application.save();
-  } else{
+  } else {
     application.status = "ALL-ROUND-PASSED";
     application.save();
     return res.status(200).json({

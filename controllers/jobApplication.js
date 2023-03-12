@@ -38,6 +38,7 @@ export const jobApplication = bigPromise(async (req, res, next) => {
     status: "APPLIED",
     totalRound: rounds.rounds.length,
   };
+  
 
   // console.log(toStore);
   const jobSeeker = await JobApplication.findOne({ jobSeekerId, jobId })
