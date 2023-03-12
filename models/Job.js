@@ -37,6 +37,7 @@ const jobsSchema = new mongoose.Schema(
     },
     interviewRoundId: {
       type: mongoose.Schema.ObjectId,
+      ref: "InterviewRound",
     },
     questionBankId: {
       type: mongoose.Schema.ObjectId,

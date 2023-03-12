@@ -41,8 +41,8 @@ const jobApplicationSchema = new mongoose.Schema(
     ],
     status: {
       type: String,
-      enum: ["APPLIED", "EXAM-COMPLETED", "INTERVIEWED", "EXAM-PASSED"],
-      default: "ACTIVE",
+      enum: ["APPLIED", "EXAM-COMPLETED", "INTERVIEWED", "EXAM-PASSED","NOT-APPLIED"],
+      default: "NOT-APPLIED",
     },
   },
   {
