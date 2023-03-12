@@ -229,29 +229,45 @@ export const getAllApplicant = bigPromise(async (req, res, next) => {
 export const getApplicantJobs = bigPromise(async (req, res) => {
   const jobSeekerId = req.user.id;
 
-  const applications = await JobApplication.find({ jobSeekerId })
+  const applications = await JobApplication.find({ jobSeekerId }).populate({
+    path: "jobId",
+    select: "profileId",
+  });
 
   const data = applications.map((app) => {
     const currentRound = app.roundWiseStats
       .filter((round) => round.status === "PASSED")
       .sort((a, b) => b.roundId - a.roundId)[0];
 
+    console.log(app.jobId.profileId);
+    const nextRound = InterviewRound.findOne({
+      profile: app.jobId.profileId,
+    })
+      .lean()
+      .catch((err) => {
+        console.log(`error getting inrerview round ::${err}`);
+        return null;
+      });
+
+    console.log(nextRound);
     return {
       applicationId: app.applicationId,
       jobTitle: app.jobId.title,
+      jobId :app._id,
       interviewer: app.interviewer,
+      roundWiseStats: app.roundWiseStats,
       applyDate: app.applyDate,
       status: app.status,
       currentRound: currentRound || null,
+      nextRound: nextRound,
     };
   });
 
   res.status(200).json({
     success: true,
-    data:data,
+    data: data,
   });
 });
-
 
 export const updateApplicant = bigPromise(async (req, res, next) => {
   const newData = {
