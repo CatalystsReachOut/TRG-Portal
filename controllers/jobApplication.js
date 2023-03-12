@@ -226,8 +226,9 @@ export const getApplicantJobs = bigPromise(async (req, res) => {
     // console.log(nextRound);
     return {
       applicationId: app.applicationId,
+      _id: app._id,
       jobTitle: app.jobId.title,
-      jobId: app._id,
+      jobId: app.jobId._id,
       interviewer: app.interviewer,
       roundWiseStats: app.roundWiseStats,
       applyDate: app.applyDate,
