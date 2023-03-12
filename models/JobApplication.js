@@ -22,16 +22,20 @@ const jobApplicationSchema = new mongoose.Schema(
     },
     roundWiseStats: [
       {
+        roundNumber: {
+          type: Number,
+        },
         marksObtained: {
           type: Number,
         },
         roundId: {
           type: mongoose.Types.ObjectId,
           ref: "Round",
-          uniques: true,
+          unique: true,
         },
         roundName: {
           type: String,
+          unique: true,
         },
         status: {
           type: String,
@@ -39,9 +43,19 @@ const jobApplicationSchema = new mongoose.Schema(
         },
       },
     ],
+    totalRound: {
+      type: Number,
+    },
     status: {
       type: String,
-      enum: ["APPLIED", "EXAM-COMPLETED", "INTERVIEWED", "EXAM-PASSED","NOT-APPLIED"],
+      enum: [
+        "APPLIED",
+        "EXAM-COMPLETED",
+        "INTERVIEWED",
+        "EXAM-PASSED",
+        "ALL-ROUND-PASSED",
+        "NOT-APPLIED",
+      ],
       default: "NOT-APPLIED",
     },
   },

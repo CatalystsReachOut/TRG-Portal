@@ -24,11 +24,19 @@ export const jobApplication = bigPromise(async (req, res, next) => {
   // console.log(jobId);
   const applicationId = makeId(3);
 
+  const ap = await Jobs.findOne({ _id: jobId }).select("profileId");
+  // console.log(ap);
+
+  const rounds = await InterviewRound.findOne({
+    profile: ap.profileId,
+  }).select("rounds");
+
   const toStore = {
     jobId,
     jobSeekerId,
     applicationId,
     status: "APPLIED",
+    totalRound: rounds.rounds.length,
   };
 
   // console.log(toStore);
@@ -86,7 +94,7 @@ export const getQuestionsJobId = bigPromise(async (req, res, next) => {
     const jobId = req.params.jobId;
     const job = await Jobs.findOne({ _id: jobId });
     const questionsRoundWise = [];
-    console.log(req.user);
+    // console.log(req.user);
 
     const applicationId = await JobApplication.find(
       {
@@ -96,38 +104,40 @@ export const getQuestionsJobId = bigPromise(async (req, res, next) => {
       "_id"
     );
 
-    const interviewRound = await InterviewRound.findOne({
-      profileId: job.profileId,
+    const interviewRound = await InterviewRound.find({
+      profile: job.profileId,
     });
-    // console.log(interviewRound);
+    console.log(interviewRound);
 
-    for (let i = 0; i < interviewRound.rounds.length; i++) {
-      const questionsIds = interviewRound.rounds[i].question;
-      const roundName = await Round.findOne(
-        { _id: interviewRound.rounds[i].round },
-        "name"
-      );
-      // console.log(questionsIds);
+    for (let k = 0; k < interviewRound.length; k++) {
+      for (let i = 0; i < interviewRound[k].rounds.length; i++) {
+        const questionsIds = interviewRound[k].rounds[i].question;
+        const roundName = await Round.findOne(
+          { _id: interviewRound[k].rounds[i].round },
+          "name"
+        );
+        console.log(questionsIds);
 
-      const totalMarks = interviewRound.rounds[i].totalMarks;
+        const totalMarks = interviewRound[k].rounds[i].totalMarks;
 
-      const totalTime = interviewRound.rounds[i].time;
+        const totalTime = interviewRound[k].rounds[i].time;
 
-      const questions = await QuestionBank.find({
-        name: { $in: questionsIds },
-      })
-        .lean()
-        .catch((err) => {
-          console.log(`error getting question => ${err}`);
+        const questions = await QuestionBank.find({
+          name: { $in: questionsIds },
+        })
+          .lean()
+          .catch((err) => {
+            console.log(`error getting question => ${err}`);
+          });
+        // console.log(questions);
+        questionsRoundWise.push({
+          round: roundName,
+          questions: questions,
+          totalMarks: totalMarks,
+          totalTime: totalTime,
+          applicationId: applicationId[0]._id,
         });
-      // console.log(questions);
-      questionsRoundWise.push({
-        round: roundName,
-        questions: questions,
-        totalMarks: totalMarks,
-        totalTime: totalTime,
-        applicationId: applicationId[0]._id,
-      });
+      }
     }
 
     if (questionsRoundWise.length === 0) {
