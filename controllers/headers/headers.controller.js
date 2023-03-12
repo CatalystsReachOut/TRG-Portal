@@ -163,8 +163,10 @@ export const addCity = bigPromise(async (req, res, next) => {
 });
 
 export const getAllCity = bigPromise(async (req, res, next) => {
+  const state = req.query.state;
   const condition = {
     status: ["ACTIVE", "INACTIVE"],
+    state: state,
   };
 
   const cities = await City.find(condition)
@@ -614,10 +616,10 @@ export const addState = bigPromise(async (req, res, next) => {
 });
 
 export const getAllState = bigPromise(async (req, res, next) => {
-  const countryId = req.query.countryId;
+  const country = req.query.country;
   const condition = {
     status: ["ACTIVE", "INACTIVE"],
-    countryId: countryId,
+    country: country,
   };
 
   const states = await State.find(condition)
