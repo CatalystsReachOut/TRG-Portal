@@ -86,7 +86,7 @@ export const getQuestionsJobId = bigPromise(async (req, res, next) => {
     const jobId = req.params.jobId;
     const job = await Jobs.findOne({ _id: jobId });
     const questionsRoundWise = [];
-    // console.log(req.user);
+    console.log(req.user);
 
     const applicationId = await JobApplication.find(
       {
@@ -180,7 +180,7 @@ export const getAllApplicant = bigPromise(async (req, res, next) => {
         jobProfileName: jobApplication.jobId.profileId.title,
         applicantName: jobApplication.jobSeekerId.fullName,
         applyDate: jobApplication.applyDate,
-        id: jobApplication._id,
+        _id: jobApplication._id,
         jobId: jobApplication.jobId._id,
         jobSeekerId: jobApplication.jobSeekerId._id,
         roundWiseStats: jobApplication.roundWiseStats,
@@ -245,15 +245,15 @@ export const getApplicantJobs = bigPromise(async (req, res) => {
     })
       .lean()
       .catch((err) => {
-        console.log(`error getting inrerview round ::${err}`);
+        console.log(`error getting interview round ::${err}`);
         return null;
       });
 
-    console.log(nextRound);
+    // console.log(nextRound);
     return {
       applicationId: app.applicationId,
       jobTitle: app.jobId.title,
-      jobId :app._id,
+      jobId: app._id,
       interviewer: app.interviewer,
       roundWiseStats: app.roundWiseStats,
       applyDate: app.applyDate,
