@@ -9,14 +9,26 @@ import QuestionBank from "../models/headers/questionBank.js";
 import JobSeeker from "../models/Jobseeker.js";
 import { ObjectId } from "mongodb";
 
+function makeId(length) {
+  var result = "";
+  var characters = "0123456789";
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
 export const jobApplication = bigPromise(async (req, res, next) => {
   const jobId = req.params.jobId;
   // console.log(req.user);
   const jobSeekerId = req.user.id;
   // console.log(jobId);
+  const applicationId = makeId(3);
   const toStore = {
     jobId,
     jobSeekerId,
+    applicationId,
   };
   //   console.log(jobSeekerId);
   //   console.log(req.params);
@@ -151,6 +163,7 @@ export const getAllApplicant = bigPromise(async (req, res, next) => {
       };
     }
     // console.log(condition);
+    
 
     const jobApplications = await JobApplication.find(condition)
       .populate({
@@ -160,7 +173,7 @@ export const getAllApplicant = bigPromise(async (req, res, next) => {
       })
       .populate("jobSeekerId", "fullName")
       .populate("interviewer", "title")
-      .select("applyDate roundWiseStats")
+      .select("applicationId applyDate roundWiseStats")
       .exec();
 
     const applicants = jobApplications.map((jobApplication) => {
@@ -173,6 +186,7 @@ export const getAllApplicant = bigPromise(async (req, res, next) => {
         jobSeekerId: jobApplication.jobSeekerId._id,
         roundWiseStats: jobApplication.roundWiseStats,
         interviewer: jobApplication.interviewer,
+        applicationId: jobApplication.applicationId,
       };
     });
     // console.log(applicants);
