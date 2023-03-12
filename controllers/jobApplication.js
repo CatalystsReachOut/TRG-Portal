@@ -2,12 +2,10 @@
 import JobApplication from "../models/JobApplication.js";
 import bigPromise from "../middlewares/bigPromise.js";
 import Jobs from "../models/Job.js";
-
 import InterviewRound from "../models/headers/interviewRounds.js";
 import Round from "../models/headers/rounds.js";
 import QuestionBank from "../models/headers/questionBank.js";
 import JobSeeker from "../models/Jobseeker.js";
-import { ObjectId } from "mongodb";
 
 function makeId(length) {
   var result = "";
@@ -25,13 +23,15 @@ export const jobApplication = bigPromise(async (req, res, next) => {
   const jobSeekerId = req.user.id;
   // console.log(jobId);
   const applicationId = makeId(3);
+
   const toStore = {
     jobId,
     jobSeekerId,
     applicationId,
+    status: "APPLIED",
   };
-  //   console.log(jobSeekerId);
-  //   console.log(req.params);
+
+  // console.log(toStore);
   const jobSeeker = await JobApplication.findOne({ jobSeekerId, jobId })
     .lean()
     .catch((err) => {
@@ -162,7 +162,7 @@ export const getAllApplicant = bigPromise(async (req, res, next) => {
         jobId: req.query.jobId,
       };
     }
-    console.log(condition);
+    // console.log(condition);
 
     const jobApplications = await JobApplication.find(condition)
       .populate({
@@ -200,32 +200,6 @@ export const getAllApplicant = bigPromise(async (req, res, next) => {
   }
 });
 
-// export const getApplicantJobs = bigPromise(async (req, res, next) => {
-//   const jobSeekerId = req.user.id;
-//   const condition = {
-//     // status: ["ACTIVE", "INACTIVE"],
-//     jobSeekerId: jobSeekerId,
-//   };
-
-//   const Applications = await JobApplication.find(condition).catch((err) => {
-//     console.log(`error getting applicants :: ${err}`);
-//     return null;
-//   });
-
-//   if (Applications === null) {
-//     return res.status(501).json({
-//       success: false,
-//       message: "Internal Server error !",
-//     });
-//   }
-
-//   res.status(201).json({
-//     success: true,
-//     message: "All Applicants!",
-//     data: Applications,
-//   });
-// });
-
 export const getApplicantJobs = bigPromise(async (req, res) => {
   const jobSeekerId = req.user.id;
 
@@ -239,7 +213,7 @@ export const getApplicantJobs = bigPromise(async (req, res) => {
       .filter((round) => round.status === "PASSED")
       .sort((a, b) => b.roundId - a.roundId)[0];
 
-    console.log(app.jobId.profileId);
+    // console.log(app.jobId.profileId);
     const nextRound = InterviewRound.findOne({
       profile: app.jobId.profileId,
     })
@@ -259,7 +233,7 @@ export const getApplicantJobs = bigPromise(async (req, res) => {
       applyDate: app.applyDate,
       status: app.status,
       currentRound: currentRound || null,
-      nextRound: nextRound,
+      nextRound: nextRound || null,
     };
   });
 
