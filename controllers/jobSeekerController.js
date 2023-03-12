@@ -327,26 +327,45 @@ export const evaluate = bigPromise(async (req, res) => {
   }
 
   const applicationId = req.params.applicationId;
-  // console.log(applicationId);
+  console.log(applicationId);
 
-  const application = await JobApplication.findOne({ _id: String(applicationId) });
+  const application = await JobApplication.findOne({
+    _id: applicationId,
+  });
 
+  var roundNumber;
 
-  const newData = {
-    marksObtained: earnedMark,
-    percentage: percentage,
-    roundId: roundId,
-    roundName: roundName,
-    status: result,
-  };
+  console.log(application.roundWiseStats.length);
+  console.log(application.totalRound);
 
-  application?.roundWiseStats?.push(newData);
-  await application.save();
+  if (application.roundWiseStats.length <application.totalRound) {
+    roundNumber = application.roundWiseStats.length += 1;
+    console.log(roundNumber);
+    var newData = {
+      marksObtained: earnedMark,
+      percentage: percentage,
+      roundId: roundId,
+      roundName: roundName,
+      roundNumber: roundNumber,
+      status: result,
+    };
 
+    // console.log(newData);
+    application?.roundWiseStats?.push(newData);
+    // console.log(application);
+    await application.save();
+  } else{
+    application.status = "ALL-ROUND-PASSED";
+    application.save();
+    return res.status(200).json({
+      success: true,
+      message: `All Rounds Are Cleared`,
+    });
+  }
   return res.status(200).json({
     success: true,
     message: `Result of ${roundName}`,
-    data: newData,
+    data: application,
   });
 });
 
