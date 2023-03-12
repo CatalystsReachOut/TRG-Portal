@@ -2,12 +2,10 @@
 import JobApplication from "../models/JobApplication.js";
 import bigPromise from "../middlewares/bigPromise.js";
 import Jobs from "../models/Job.js";
-
 import InterviewRound from "../models/headers/interviewRounds.js";
 import Round from "../models/headers/rounds.js";
 import QuestionBank from "../models/headers/questionBank.js";
 import JobSeeker from "../models/Jobseeker.js";
-import { ObjectId } from "mongodb";
 
 function makeId(length) {
   var result = "";
@@ -199,32 +197,6 @@ export const getAllApplicant = bigPromise(async (req, res, next) => {
     res.status(500).json({ message: err.message });
   }
 });
-
-// export const getApplicantJobs = bigPromise(async (req, res, next) => {
-//   const jobSeekerId = req.user.id;
-//   const condition = {
-//     // status: ["ACTIVE", "INACTIVE"],
-//     jobSeekerId: jobSeekerId,
-//   };
-
-//   const Applications = await JobApplication.find(condition).catch((err) => {
-//     console.log(`error getting applicants :: ${err}`);
-//     return null;
-//   });
-
-//   if (Applications === null) {
-//     return res.status(501).json({
-//       success: false,
-//       message: "Internal Server error !",
-//     });
-//   }
-
-//   res.status(201).json({
-//     success: true,
-//     message: "All Applicants!",
-//     data: Applications,
-//   });
-// });
 
 export const getApplicantJobs = bigPromise(async (req, res) => {
   const jobSeekerId = req.user.id;
