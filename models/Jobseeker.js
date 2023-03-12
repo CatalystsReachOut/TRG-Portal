@@ -48,7 +48,6 @@ const jobseekerSchema = new mongoose.Schema(
         applicationId: {
           type: mongoose.Types.ObjectId,
           ref: "JobApplication",
-          unique: true,
         },
       },
     ],

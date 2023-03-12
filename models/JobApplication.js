@@ -31,11 +31,9 @@ const jobApplicationSchema = new mongoose.Schema(
         roundId: {
           type: mongoose.Types.ObjectId,
           ref: "Round",
-          unique: true,
         },
         roundName: {
           type: String,
-          unique: true,
         },
         status: {
           type: String,
