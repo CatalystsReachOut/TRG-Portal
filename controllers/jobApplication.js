@@ -229,10 +229,7 @@ export const getAllApplicant = bigPromise(async (req, res, next) => {
 export const getApplicantJobs = bigPromise(async (req, res) => {
   const jobSeekerId = req.user.id;
 
-  const applications = await JobApplication.find({ jobSeekerId }).populate({
-    path: "jobId",
-    select: "title",
-  });
+  const applications = await JobApplication.find({ jobSeekerId })
 
   const data = applications.map((app) => {
     const currentRound = app.roundWiseStats
