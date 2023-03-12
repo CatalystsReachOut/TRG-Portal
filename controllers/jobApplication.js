@@ -38,9 +38,9 @@ export const jobApplication = bigPromise(async (req, res, next) => {
     status: "APPLIED",
     totalRound: rounds.rounds.length,
   };
-  
 
-  // console.log(toStore);
+
+  console.log(toStore);
   const jobSeeker = await JobApplication.findOne({ jobSeekerId, jobId })
     .lean()
     .catch((err) => {
@@ -54,10 +54,14 @@ export const jobApplication = bigPromise(async (req, res, next) => {
       message: "You've already applied for this job.",
     });
   }
+
+  console.log(jobSeeker);
   const jobApplication = await JobApplication.create(toStore).catch((err) => {
     console.log(`error applying job => ${err}`);
     return null;
   });
+
+  console.log(jobApplication);
 
   if (jobApplication === null) {
     return res.status(400).json({
@@ -66,27 +70,26 @@ export const jobApplication = bigPromise(async (req, res, next) => {
     });
   }
 
-  const newData = {
-    applicationId: jobApplication._id,
-  };
+  // const newData = {
+  //   applicationId: jobApplication._id,
+  // };
 
-  console.log(jobApplication);
-  const user = await JobSeeker.findByIdAndUpdate(
-    jobSeekerId,
-    { $push: { appliedJobs: newData } },
-    { new: true }
-  )
-    .lean()
-    .catch((err) => {
-      console.log(`error updating jobseeker=> ${err}`);
-      return null;
-    });
+  // console.log(jobApplication);
+  // const user = await JobSeeker.findByIdAndUpdate(
+  //   jobSeekerId,
+  //   { $push: { appliedJobs: newData } },
+  //   { new: true }
+  // )
+  //   .lean()
+  //   .catch((err) => {
+  //     console.log(`error updating jobseeker=> ${err}`);
+  //     return null;
+  //   });
 
   return res.status(200).json({
     success: true,
     message: "Successfully Applied for Job!",
     data: jobApplication,
-    data2: user,
   });
 });
 
@@ -120,6 +123,7 @@ export const getQuestionsJobId = bigPromise(async (req, res, next) => {
         console.log(questionsIds);
 
         const totalMarks = interviewRound[k].rounds[i].totalMarks;
+        console.log(totalMarks);
 
         const totalTime = interviewRound[k].rounds[i].time;
 
