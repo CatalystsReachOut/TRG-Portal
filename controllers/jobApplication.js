@@ -162,7 +162,7 @@ export const getAllApplicant = bigPromise(async (req, res, next) => {
         jobId: req.query.jobId,
       };
     }
-    console.log(condition);
+    // console.log(condition);
 
     const jobApplications = await JobApplication.find(condition)
       .populate({
