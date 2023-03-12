@@ -1,7 +1,7 @@
 // import JobApplication from "../models/JobApplication.js";
 import JobApplication from "../models/JobApplication.js";
 import bigPromise from "../middlewares/bigPromise.js";
-import Job from "../models/Job.js";
+import Jobs from "../models/Job.js";
 
 import InterviewRound from "../models/headers/interviewRounds.js";
 import Round from "../models/headers/rounds.js";

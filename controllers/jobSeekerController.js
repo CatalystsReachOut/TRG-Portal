@@ -329,8 +329,8 @@ export const evaluate = bigPromise(async (req, res) => {
   const applicationId = req.params.applicationId;
   // console.log(applicationId);
 
-  const application = await JobApplication.findById({ _id: applicationId });
-  // console.log(application);
+  const application = await JobApplication.findOne({ _id: String(applicationId) });
+
 
   const newData = {
     marksObtained: earnedMark,
@@ -340,8 +340,8 @@ export const evaluate = bigPromise(async (req, res) => {
     status: result,
   };
 
-  application.roundWiseStats.push(newData);
-  application.save();
+  application?.roundWiseStats?.push(newData);
+  await application.save();
 
   return res.status(200).json({
     success: true,
