@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 const interviewRoundSchema = new mongoose.Schema({
   profile: {
-    type: String,
+    type: mongoose.Types.ObjectId,
+    ref: "Profile",
   },
   noOfRound: {
     type: Number,
