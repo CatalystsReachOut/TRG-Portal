@@ -360,7 +360,7 @@ export const evaluate = bigPromise(async (req, res) => {
   return res.status(200).json({
     success: true,
     message: `Result of ${roundName}`,
-    data: application,
+    data: newData,
   });
 });
 
