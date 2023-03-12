@@ -8,6 +8,7 @@ import Business from "../models/headers/business.js";
 import User from "../models/User.js";
 
 import { isEmpty } from "../utils/isEmpty.js";
+import JobApplication from "../models/JobApplication.js";
 
 const getDetails = async (job) => {
   const [data1, data2, data3, data4, data5, data6] = await Promise.all([
@@ -341,6 +342,93 @@ export const getJobById = bigPromise(async (req, res, next) => {
       cityName: data3?.name,
       userName: data4?.name,
       jobApproval: jobApproval,
+    },
+  });
+});
+
+
+export const getJobByIdJobSeeker = bigPromise(async (req, res, next) => {
+  const { id } = req.params;
+
+  const user = req.user;
+
+  if(!user){
+    console.log('user not found');
+    return res.status(501).json({
+      success: false,
+      mesage: "Internal Server Error",
+    });
+  }
+
+  let job = await Job.findById(req.params.id).catch((err) => {
+    console.log(`error getting job by id :: ${id} :: ${err}`);
+    return null;
+  });
+
+  if (!job) {
+    return res.status(501).json({
+      success: false,
+      mesage: "Internal Server Error",
+    });
+  }
+
+  const [data1, data2, data3, data4] = await Promise.all([
+    Profile.findById(job.profileId).catch((err) => {
+      console.log(
+        `error getting profile with id :: ${job.profileId} :: ${err}`
+      );
+      return null;
+    }),
+    Business.findById(job.businessId).catch((err) => {
+      console.log(
+        `error getting Business with id :: ${job.businessId} :: ${err}`
+      );
+      return null;
+    }),
+    City.findById(job.cityId).catch((err) => {
+      console.log(
+        `error getting Business with id :: ${job.businessId} :: ${err}`
+      );
+      return null;
+    }),
+    User.findById(job?.createdBy).catch((err) => {
+      console.log(`error getting User with id :: ${job.createdBy} :: ${err}`);
+      return null;
+    }),
+  ]);
+
+  let jobApproval = 0;
+
+  if (job.approver_1?.status === "PENDING") {
+    jobApproval = 1;
+  } else if (job.approver_2?.status === "PENDING") {
+    jobApproval = 2;
+  } else if (job.approver_3?.status === "PENDING") {
+    jobApproval = 3;
+  } else if (job.approver_4?.status === "PENDING") {
+    jobApproval = 4;
+  }
+
+
+  const application = await JobApplication.findOne({
+    jobId: job._id,
+    jobSeekerId: user._id,
+  }).catch((err) => {
+    console.log(`error getting application :: ${err}`);
+    return null;
+  });
+
+
+  res.status(201).json({
+    success: true,
+    data: {
+      job: job,
+      profileName: data1?.title,
+      businessName: data2?.name,
+      cityName: data3?.name,
+      userName: data4?.name,
+      jobApproval: jobApproval,
+      application: application || null,
     },
   });
 });

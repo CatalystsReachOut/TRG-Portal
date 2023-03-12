@@ -18,6 +18,14 @@ export const isLoggedIn=bigPromise(async(req,res,next)=>{
     // console.log(decode)
 
     req.user=await User.findOne({_id:decode.id})
+
+    if(!req.user){
+        return res.status(403).json({
+            success:"false",
+            message:"Login First to access this page"
+        })
+    }
+
     return next()
 
 })
@@ -33,3 +41,5 @@ export const customRole=(...roles)=>{
         next()
     }
 }
+
+

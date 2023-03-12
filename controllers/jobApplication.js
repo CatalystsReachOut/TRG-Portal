@@ -202,9 +202,9 @@ export const getAllApplicant = bigPromise(async (req, res, next) => {
 });
 
 export const getApplicantJobs = bigPromise(async (req, res, next) => {
-  const jobSeekerId = req.user.id;
+  const jobSeekerId = req.user._id;
   const condition = {
-    status: ["ACTIVE", "INACTIVE"],
+    // status: ["ACTIVE", "INACTIVE"],
     jobSeekerId: jobSeekerId,
   };
 
